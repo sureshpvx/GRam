@@ -1,0 +1,24 @@
+<% content_for :title, "Posts" %>
+
+<div class="w-full">
+  <h1 class="font-bold text-4xl">Posts</h1>
+  <div class="max-w-5xl mx-auto mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% @posts.each do |post| %>
+      <div class="card bg-base-100 w-96 shadow-sm">
+        <% if post.images.attached? %>
+          <figure>
+            <img src="<%= url_for(post.images.first) %>" alt="<%= post.caption %>" />
+          </figure>
+        <% end %>
+        <div class="card-body">
+          <h2 class="card-title"><%= post.caption %></h2>
+          <p><%= post.body %></p>
+          <div class="card-actions justify-end">
+            <%= link_to 'Read More', post_path(post), class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
