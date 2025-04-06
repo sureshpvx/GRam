@@ -5,6 +5,13 @@ if ! gem list foreman -i --silent; then
   gem install foreman
 fi
 
+# Load environment variables
+if [ -f .env.development ]; then
+  # Load environment variables using dotenv
+  export $(grep -v '^#' .env.development | xargs)
+  echo "Environment variables loaded from .env.development"
+fi
+
 # Default to port 3000 if not specified
 export PORT="${PORT:-3000}"
 
@@ -13,4 +20,12 @@ export PORT="${PORT:-3000}"
 export RUBY_DEBUG_OPEN="true"
 export RUBY_DEBUG_LAZY="true"
 
+# Print environment variables for debugging
+echo "GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:+present}"
+echo "GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:+present}"
+
+# Ensure we're using the correct Ruby environment
+export PATH="$HOME/.rbenv/shims:$PATH"
+
+# Start foreman with the environment variables
 exec foreman start -f Procfile.dev "$@"

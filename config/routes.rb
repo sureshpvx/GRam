@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'profile', to: 'profiles#show', as: :profile
   resources :posts
   resource :registrations, only: [:new, :create]
   resource :session

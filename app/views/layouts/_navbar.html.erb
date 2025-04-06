@@ -18,7 +18,7 @@
         <li><a>Item 3</a></li>
       </ul>
     </div>
-  <a href="/" class="btn btn-ghost text-xl">GRam</a>
+    <a href="/" class="btn btn-ghost text-xl">GRam</a>
   </div>
   <div class="navbar-center hidden lg:flex">
     <ul class="menu menu-horizontal px-1">
@@ -36,6 +36,39 @@
     </ul>
   </div>
   <div class="navbar-end">
-    <a class="btn">Button</a>
+    <% if Current.user %>
+      <div class="dropdown dropdown-end">
+        <label tabindex="0" class="btn btn-ghost btn-circle">
+          <div class="avatar">
+            <div class="w-10 rounded-full">
+              <% if Current.user.google_user? && Current.user.avatar_url.present? %>
+                <%= image_tag Current.user.avatar_image, 
+                    alt: Current.user.name.presence || 'Profile',
+                    class: "w-full h-full object-cover" %>
+              <% else %>
+                <div class="w-full h-full bg-primary flex items-center justify-center text-xl font-bold text-primary-content rounded-full">
+                  <%= Current.user.name&.first&.upcase || Current.user.email_address.first.upcase %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </label>
+        <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+          <li>
+            <a class="justify-between rounded-full">
+              <span class="font-medium"><%= Current.user.name.presence || Current.user.email_address %></span>
+              <% if Current.user.google_user? %>
+                <span class="badge badge-primary badge-sm rounded-full">Google</span>
+              <% end %>
+            </a>
+          </li>
+          <li><a href="/profile" class="rounded-full">Profile</a></li>
+          <li><a class="rounded-full">Settings</a></li>
+          <li><%= link_to "Logout", session_path, data: { turbo_method: :delete }, class: "rounded-full" %></li>
+        </ul>
+      </div>
+    <% else %>
+      <%= link_to "Sign in", new_session_path, class: "btn btn-primary rounded-full" %>
+    <% end %>
   </div>
 </div>

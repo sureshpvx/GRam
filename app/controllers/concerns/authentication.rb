@@ -39,10 +39,29 @@ module Authentication
     end
 
     def start_new_session_for(user)
-      user.sessions.create!(user_agent: request.user_agent, ip_address: request.remote_ip).tap do |session|
-        Current.session = session
-        cookies.signed.permanent[:session_id] = { value: session.id, httponly: true, same_site: :lax }
-      end
+      # Terminate any existing sessions for this user
+      user.sessions.destroy_all
+      
+      # Create a new session
+      new_session = user.sessions.create!(
+        user_agent: request.user_agent,
+        ip_address: request.remote_ip
+      )
+      
+      Rails.logger.info "Created new session: #{new_session.inspect}"
+      Rails.logger.info "User in new session: #{new_session.user.inspect}"
+      
+      # Set the current session
+      Current.session = new_session
+      
+      # Set the cookie
+      cookies.signed.permanent[:session_id] = {
+        value: new_session.id,
+        httponly: true,
+        same_site: :lax
+      }
+      
+      new_session
     end
 
     def terminate_session

@@ -1,0 +1,54 @@
+<div class="max-w-2xl mx-auto mt-8">
+  <div class="bg-base-100 shadow rounded-lg p-6">
+    <div class="flex items-center space-x-6 mb-4">
+      <div class="avatar">
+        <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+          <% if @user.google_user? && @user.avatar_url.present? %>
+            <%= image_tag @user.avatar_image, 
+                alt: @user.name.presence || 'Profile',
+                class: "w-full h-full object-cover" %>
+          <% else %>
+            <div class="w-full h-full bg-primary flex items-center justify-center text-4xl font-bold text-primary-content">
+              <%= @user.name&.first&.upcase || @user.email_address.first.upcase %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold"><%= @user.name.presence || @user.email_address %></h2>
+        <p class="text-gray-600"><%= @user.email_address %></p>
+        <% if @user.google_user? %>
+          <span class="badge badge-primary badge-sm mt-2">Google Account</span>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="border-t border-base-300 mt-6 pt-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-lg font-medium">Account Information</h3>
+          <dl class="mt-2 space-y-4">
+            <div>
+              <dt class="text-sm font-medium text-base-content/70">Email</dt>
+              <dd class="mt-1 text-sm"><%= @user.email_address %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-base-content/70">Member since</dt>
+              <dd class="mt-1 text-sm"><%= @user.created_at.strftime("%B %d, %Y") %></dd>
+            </div>
+          </dl>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium">Stats</h3>
+          <dl class="mt-2 space-y-4">
+            <div>
+              <dt class="text-sm font-medium text-base-content/70">Posts</dt>
+              <dd class="mt-1 text-sm"><%= @user.posts.count %></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

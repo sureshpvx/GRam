@@ -1,2 +1,2 @@
-web: bin/rails server
-css: bin/rails tailwindcss:watch
+web: GOOGLE_CLIENT_ID=47179753582-4bg74datc0261qcvm38m72covi50mbm6.apps.googleusercontent.com GOOGLE_CLIENT_SECRET=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 bundle exec rails server
+css: bundle exec rails tailwindcss:watch
