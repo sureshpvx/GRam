@@ -1,19 +1,50 @@
 <% content_for :title, "Posts" %>
 
-<div class="w-full">
+<div class="w-full px-4 space-y-8">
   <h1 class="font-bold text-4xl">Posts</h1>
-  <div class="max-w-5xl mx-auto mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
     <% @posts.each do |post| %>
-      <div class="card bg-base-100 w-96 shadow-sm">
+      <div class="card bg-base-100 shadow-sm w-full">
         <% if post.images.attached? %>
-          <figure>
-            <img src="<%= url_for(post.images.first) %>" alt="<%= post.caption %>" />
+          <figure class="relative pt-[100%] group">
+            <% if post.images.count > 1 %>
+              <div class="absolute inset-0 flex overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+                <% post.images.each do |image| %>
+                  <div class="flex-none w-full snap-center">
+                    <%= image_tag url_for(image), 
+                        class: "w-full h-full object-cover",
+                        alt: post.caption %>
+                  </div>
+                <% end %>
+              </div>
+              
+              <!-- Left Arrow -->
+              <button class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                      onclick="this.parentElement.querySelector('.flex').scrollBy({ left: -this.parentElement.offsetWidth, behavior: 'smooth' })">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              
+              <!-- Right Arrow -->
+              <button class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                      onclick="this.parentElement.querySelector('.flex').scrollBy({ left: this.parentElement.offsetWidth, behavior: 'smooth' })">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            <% else %>
+              <%= image_tag url_for(post.images.first), 
+                  class: "absolute inset-0 w-full h-full object-cover",
+                  alt: post.caption %>
+            <% end %>
           </figure>
         <% end %>
         <div class="card-body">
           <h2 class="card-title"><%= post.caption %></h2>
-          <p><%= post.body %></p>
-          <div class="card-actions justify-end">
+          <p class="line-clamp-3"><%= post.body %></p>
+          <div class="card-actions justify-end mt-4">
             <%= link_to 'Read More', post_path(post), class: 'btn btn-primary' %>
           </div>
         </div>
@@ -21,4 +52,3 @@
     <% end %>
   </div>
 </div>
-

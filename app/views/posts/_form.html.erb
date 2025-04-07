@@ -11,7 +11,6 @@
     </div>
   <% end %>
 
-
   <div class="my-5">
     <%= form.label :caption %>
     <%= form.text_field :caption, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": post.errors[:caption].none?, "border-red-400 focus:outline-red-600": post.errors[:caption].any?}] %>
@@ -19,12 +18,29 @@
 
   <div class="my-5">
     <%= form.label :body %>
-    <%= form.textarea :body, rows: 4, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": post.errors[:body].none?, "border-red-400 focus:outline-red-600": post.errors[:body].any?}] %>
+    <%= form.text_area :body, rows: 4, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": post.errors[:body].none?, "border-red-400 focus:outline-red-600": post.errors[:body].any?}] %>
   </div>
 
+  <% if post.images.attached? %>
+    <div class="my-5">
+      <label class="block font-medium mb-2">Current Images</label>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <% post.images.each do |image| %>
+          <div class="relative">
+            <%= image_tag url_for(image), class: "w-full h-48 object-cover rounded-lg" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="my-5">
-    <%= form.label :images %>
-    <%= form.file_field :images, multiple: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": post.errors[:images].none?, "border-red-400 focus:outline-red-600": post.errors[:images].any?}] %>
+    <%= form.label :images, "Add More Images" %>
+    <%= form.file_field :images, multiple: true, 
+        class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", 
+        {"border-gray-400 focus:outline-blue-600": post.errors[:images].none?, 
+         "border-red-400 focus:outline-red-600": post.errors[:images].any?}],
+        accept: "image/*" %>
   </div>
 
   <div class="inline">
